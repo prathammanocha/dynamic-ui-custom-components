@@ -1,11 +1,17 @@
 // src/App.jsx
 import React from "react";
-import { MenuBarProvider, useMenuBar } from "./widgets/DynamicMenuBar/MenuBarContext";
+import { MenuBarProvider, useMenuBar } from "@/widgets/DynamicMenuBar/MenuBarContext";
 import MenuBarGenerator from "./widgets/DynamicMenuBar/MenuBarGenerator";
+import { CardProvider, useCard } from "./widgets/DynamicCard/CardContext";
+import CardGenerator from "./widgets/DynamicCard/CardGenerator";
+import { Button } from "./components/ui/button";
 
+// Main Component
 const AppComponent = () => {
   const { updateMenuBar } = useMenuBar();
+  const { updateCard } = useCard();
 
+  // Handle MenuBar update
   const handleUpdateMenuBar = () => {
     const newMenuData = [
       {
@@ -33,14 +39,27 @@ const AppComponent = () => {
     updateMenuBar(newMenuData);
   };
 
+  // Handle Card update
+  const handleUpdateCard = () => {
+    const newCardData = {
+      title: "Updated Title",
+      description: "Updated Description",
+      content: "Updated Content",
+      footer: "Updated Footer",
+    };
+    updateCard(newCardData);
+  };
+
   return (
     <div>
       <h1>Welcome to the Main Application</h1>
-      <button onClick={handleUpdateMenuBar}>Update Menu Bar</button>
+      <Button onClick={handleUpdateMenuBar}>Update Menu Bar</Button>
+      <Button onClick={handleUpdateCard}>Update Card</Button>
     </div>
   );
 };
 
+// Default Data for MenuBar and Card
 const defaultMenuData = [
   {
     label: "File",
@@ -58,12 +77,25 @@ const defaultMenuData = [
   },
 ];
 
-const AppWithMenuBar = MenuBarGenerator(AppComponent, defaultMenuData);
+const defaultCardData = {
+  title: "Default Title",
+  description: "Default Description",
+  content: "Default Content",
+  footer: "Default Footer",
+};
+
+// Wrap Main Component with Generators
+const AppWithMenuBarAndCard = MenuBarGenerator(
+  CardGenerator(AppComponent, defaultCardData),
+  defaultMenuData
+);
 
 export default function App() {
   return (
     <MenuBarProvider>
-      <AppWithMenuBar />
+      <CardProvider>
+        <AppWithMenuBarAndCard />
+      </CardProvider>
     </MenuBarProvider>
   );
 }
