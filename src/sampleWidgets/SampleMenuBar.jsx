@@ -1,4 +1,4 @@
-import MenuBarGenerator from "@/widgets/CustomMenuBar/MenuBarGenerator";
+import MenuBarGenerator from "@/widgets/MenuBar/MenuBarGenerator";
 
 const AppComponent = () => {
   return (
